@@ -3,6 +3,7 @@ package com.example.coolweather.news;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.coolweather.R;
+import com.example.coolweather.util.Utility;
 
 import java.util.List;
 
@@ -21,11 +24,12 @@ import java.util.List;
 public class NewsAdapter extends ArrayAdapter<News> {
 
     private int resourceId;
-
+    private Context mContext;
 
     public NewsAdapter(@NonNull Context context, int resource, @NonNull List<News> objects) {
         super(context, resource, objects);
         resourceId = resource;
+        mContext = context;
     }
 
     @NonNull
@@ -33,11 +37,23 @@ public class NewsAdapter extends ArrayAdapter<News> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
         News news = getItem(position);
-        View view = LayoutInflater.from(getContext()).inflate(resourceId, parent, false);
+        View view;
+        if (convertView == null) {
+            view = LayoutInflater.from(getContext()).inflate(resourceId, parent, false);
+
+        } else {
+            view = convertView;
+        }
         ImageView newsImage = (ImageView) view.findViewById(R.id.news_image);
         TextView newsTitle = (TextView) view.findViewById(R.id.news_title);
-//        newsImage.setImageResource(news.getNewsImage());
-//        newsTitle.setText(news.getNewsTitle());
+        if (news.getNewsImage().isEmpty()) {
+            //如果网络图片的url是空，则加载本地图片
+            Glide.with(mContext).load(R.drawable.ic_image_fail).fitCenter().into(newsImage);
+
+        } else {
+            Glide.with(mContext).load(news.getNewsImage()).fitCenter().into(newsImage);
+        }
+        newsTitle.setText(news.getNewsTitle());
         return view;
     }
 }

@@ -115,7 +115,14 @@ public class StreetFragment extends Fragment {
         } else {
 
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            imageUri = Uri.parse(prefs.getString("street_image_uri", null));
+            String image =prefs.getString("street_image_uri", null);
+
+            if (image == null) {
+                Log.d(Utility.TAG, "displayPicture image is null" + imageUri);
+
+                return;
+            }
+            imageUri = Uri.parse(image);
             Log.d(Utility.TAG, "displayPicture-2 imageUri=" + imageUri);
         }
         try {
@@ -131,29 +138,6 @@ public class StreetFragment extends Fragment {
 
 
     }
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        switch (requestCode) {
-//            case TAKE_PHOTO:
-//                if (resultCode == RESULT_OK) {
-//                    try {
-//                        Log.d(Utility.TAG,"展示照片");
-//
-//                        //将拍摄的照片显示出来
-//                        Bitmap bitmap = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(imageUri));
-//                        picImageView.setImageBitmap(bitmap);
-//
-//                    } catch (FileNotFoundException e) {
-//                        e.printStackTrace();
-//                    }
-//
-//                }
-//                break;
-//
-//                default:
-//                    break;
-//        }
-//    }
 
     public Uri getImageUri() {
         return imageUri;

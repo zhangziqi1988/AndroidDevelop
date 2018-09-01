@@ -3,11 +3,12 @@
     package="com.example.coolweather">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
-        android:hardwareAccelerated="false"
         android:name="org.litepal.LitePalApplication"
         android:allowBackup="true"
+        android:hardwareAccelerated="false"
         android:icon="@mipmap/logo"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -31,18 +32,19 @@
         <activity android:name=".ChooseArea" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".RegisActivity" />
-        <activity android:name=".PersionInfoActivity"></activity>
+        <activity android:name=".PersionInfoActivity" />
 
         <provider
-            android:authorities="com.example.coolweather.fileprovider"
             android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.example.coolweather.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
-
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"/>
+                android:resource="@xml/file_paths" />
         </provider>
+
+        <activity android:name=".news.NewsContent"></activity>
     </application>
 
 </manifest>

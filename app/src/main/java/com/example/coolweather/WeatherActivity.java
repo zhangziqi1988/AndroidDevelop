@@ -297,6 +297,7 @@ public class WeatherActivity extends AppCompatActivity implements NavigationView
                 }
                 break;
             case 2:
+                //处理拍照
                 if (resultCode == RESULT_OK) {
                     Log.d(Utility.TAG, "拍照成功");
 //                    StreetFragment streetFragment_pic = new StreetFragment();
