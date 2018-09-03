@@ -22,12 +22,15 @@ import org.litepal.crud.DataSupport;
 
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class LoginActivity extends AppCompatActivity {
 
 
     private String passWordDb;
     private String userNameDb;
     private List<User> users;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +43,7 @@ public class LoginActivity extends AppCompatActivity {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         Button loginButton = (Button)findViewById(R.id.loginButton);
         Button regisButton = (Button)findViewById(R.id.regisButton);
+
         SharedPreferences preferences = getSharedPreferences("zzq",MODE_PRIVATE);
         final SharedPreferences.Editor editor = preferences.edit();
         String userName = preferences.getString("name",null);

@@ -1,7 +1,9 @@
 package com.example.coolweather;
 
 import android.content.ContentValues;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -27,6 +29,10 @@ public class RegisActivity extends AppCompatActivity {
     private EditText passWordText;
     private String passWordDb= null;
     private String userNameDb = null;
+    private EditText userEmilText;
+    private EditText userSigureText;
+    private String userEmil;
+    private String userSigure;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,6 +44,16 @@ public class RegisActivity extends AppCompatActivity {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         userNameText = (EditText) findViewById(R.id.userName);
         passWordText = (EditText) findViewById(R.id.passWord);
+        userEmilText = (EditText) findViewById(R.id.emil);
+        userSigureText = (EditText) findViewById(R.id.sigure);
+
+        userEmil = userEmilText.getText().toString();
+        userSigure = userSigureText.getText().toString();
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(RegisActivity.this).edit();
+        editor.putString("user_emil", userEmil);
+        editor.putString("user_sigure", userSigure);
+        editor.commit();
+
         button = (Button) findViewById(R.id.regisButton);
         button.setOnClickListener(new View.OnClickListener() {
             @Override

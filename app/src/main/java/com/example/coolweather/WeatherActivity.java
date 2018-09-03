@@ -239,12 +239,6 @@ public class WeatherActivity extends AppCompatActivity implements NavigationView
             @Override
             public void onClick(View v) {
 
-//                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(WeatherActivity.this);
-//                boolean login_status = prefs.getBoolean("login_status", false);
-//                if (login_status) {
-//                    loginView.setImageResource(R.drawable.ic_log_head);
-//                }
-
                 drawerLayout.openDrawer(GravityCompat.START);
 
                 Log.d("CoolWeather", "加载滑动菜单");
@@ -252,29 +246,6 @@ public class WeatherActivity extends AppCompatActivity implements NavigationView
         });
 
 
-//        navigationView.setCheckedItem(R.id.choose_city);
-//        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-//            @Override
-//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-////                Toast.makeText(WeatherActivity.this,"选择城市",Toast.LENGTH_SHORT).show();
-//                chooseCity();
-////                replceChooseFragment();
-//
-//
-//                return true;
-//            }
-//        });
-
-
-//        nav_update_weather.setCheckedItem(R.id.update_weather);
-//        nav_update_weather.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-//            @Override
-//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//
-//                Toast.makeText(WeatherActivity.this,"更新天气",Toast.LENGTH_SHORT).show();
-//                return true;
-//            }
-//        });
 
         //设置navigationview的menu监听
         navigationView.setNavigationItemSelectedListener(this);

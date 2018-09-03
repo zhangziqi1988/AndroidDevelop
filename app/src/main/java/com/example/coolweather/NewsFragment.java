@@ -56,7 +56,7 @@ public class NewsFragment extends Fragment {
     private static final String APPKEY = "70e02d39b263a566";// 你的appkey
     private static final String URL = "http://api.jisuapi.com/news/get";
     private String channel;// utf8  新闻频道(头条,财经,体育,娱乐,军事,教育,科技,NBA,股票,星座,女性,健康,育儿)
-    private static final int num = 30;// 数量 默认10，最大40
+    private static final int num = 10;// 数量 默认10，最大40
     private ImageView newsImage;
     private SwipeRefreshLayout newsRefresh;
     private NewsAdapter newsAdapter;
@@ -72,7 +72,7 @@ public class NewsFragment extends Fragment {
         newsRefresh = (SwipeRefreshLayout) view.findViewById(R.id.news_refresh);
 
         newsTabLayout = (TabLayout) view.findViewById(R.id.news_categary);
-        newsViewPager = (ViewPager) view.findViewById(R.id.news_viewpager);
+//        newsViewPager = (ViewPager) view.findViewById(R.id.news_viewpager);
 
         Log.d(Utility.TAG, "newsfragment onCreateView");
 
@@ -82,21 +82,10 @@ public class NewsFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        //            initNews();
 
 
         initTab();
 
-        newsRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                try {
-                    refreshNews();
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
 
     }
 
@@ -108,26 +97,13 @@ public class NewsFragment extends Fragment {
 
 //        newsTabLayout.setupWithViewPager(newsViewPager);
 
-        getNewsCategory();
-//        for(int i =0 ;i <5;i++) {
-//            Log.d(Utility.TAG, "i=" + i);
-//            newsTabLayout.addTab(newsTabLayout.newTab());
-//            newsTabLayout.getTabAt(i).setText("TAB" + i);
-//
-//        }
-//        newsTabLayout.addTab(newsTabLayout.newTab());
-//        newsTabLayout.addTab(newsTabLayout.newTab());
-//        newsTabLayout.addTab(newsTabLayout.newTab());
-//        newsTabLayout.addTab(newsTabLayout.newTab());
-//        newsTabLayout.getTabAt(0).setText("TAB1");
-//        newsTabLayout.getTabAt(1).setText("TAB2");
-//        newsTabLayout.getTabAt(2).setText("TAB3");
-//        newsTabLayout.getTabAt(3).setText("TAB4");
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                getNewsCategory();
 
-
-//        newsChannelList =  NewsChannel.newsCategory;
-//        Log.d(Utility.TAG, "newsCategory length=" +NewsChannel.newsCategory.size());
-
+            }
+        });
 
     }
 
@@ -173,6 +149,29 @@ public class NewsFragment extends Fragment {
 
                             }
 
+                            if (newsTabLayout.getTabAt(0).isSelected()) {
+                                Log.d(Utility.TAG, "newsTabLayout init" + newsTabLayout.getTabAt(0).getText());
+
+                                try {
+                                    initNews("头条");
+                                } catch (UnsupportedEncodingException e) {
+                                    e.printStackTrace();
+                                }
+
+                                newsRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+
+
+                                    @Override
+                                    public void onRefresh() {
+                                        try {
+                                            refreshNews("头条");
+                                        } catch (UnsupportedEncodingException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
+
+                            }
                             newsTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                                 @Override
                                 public void onTabSelected(TabLayout.Tab tab) {
@@ -187,6 +186,20 @@ public class NewsFragment extends Fragment {
                                         e.printStackTrace();
                                     }
                                     Log.d(Utility.TAG, "onTabSelected pos=" + pos);
+
+                                    newsRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+
+
+                                        @Override
+                                        public void onRefresh() {
+                                            Log.d(Utility.TAG, "onRefresh" + channel);
+                                            try {
+                                                refreshNews(channel);
+                                            } catch (UnsupportedEncodingException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    });
                                 }
 
                                 @Override
@@ -199,51 +212,36 @@ public class NewsFragment extends Fragment {
 
                                 @Override
                                 public void onTabReselected(TabLayout.Tab tab) {
-                                    int pos = tab.getPosition();
+                                     int pos = tab.getPosition();
                                     Log.d(Utility.TAG, "onTabReselected pos=" + pos);
+                                    channel = newsChannelList.get(pos);
+                                    Log.d(Utility.TAG, "channel=" + channel);
 
+                                    try {
+                                        initNews(channel);
+                                    } catch (UnsupportedEncodingException e) {
+                                        e.printStackTrace();
+                                    }
+                                    Log.d(Utility.TAG, "onTabSelected pos=" + pos);
+
+                                    newsRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+
+                                        @Override
+                                        public void onRefresh() {
+                                            try {
+                                                refreshNews(channel);
+                                            } catch (UnsupportedEncodingException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    });
                                 }
+
                             });
 
                         }
                     });
 
-
-//                    for (int i = 0; i < newsChannelList.size(); i++) {
-//                        String s = newsChannelList.get(i);
-//                        newsTabLayout.getTabAt(i).setText(s);
-//                    }
-//                    newsTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-//                        @Override
-//                        public void onTabSelected(TabLayout.Tab tab) {
-//
-//                            int pos = tab.getPosition();
-//                            channel = newsChannelList.get(pos);
-//                            Log.d(Utility.TAG, "channel=" + channel);
-//
-//                            try {
-//                                initNews(channel);
-//                            } catch (UnsupportedEncodingException e) {
-//                                e.printStackTrace();
-//                            }
-//                            Log.d(Utility.TAG, "onTabSelected pos=" + pos);
-//                        }
-//
-//                        @Override
-//                        public void onTabUnselected(TabLayout.Tab tab) {
-//                            int pos = tab.getPosition();
-//
-//                            Log.d(Utility.TAG, "onTabUnselected pos=" + pos);
-//
-//                        }
-//
-//                        @Override
-//                        public void onTabReselected(TabLayout.Tab tab) {
-//                            int pos = tab.getPosition();
-//                            Log.d(Utility.TAG, "onTabReselected pos=" + pos);
-//
-//                        }
-//                    });
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -262,9 +260,10 @@ public class NewsFragment extends Fragment {
 
     }
 
-    private void refreshNews() throws UnsupportedEncodingException {
+    private void refreshNews(String channel) throws UnsupportedEncodingException {
 
-//        initNews();
+        Log.d(Utility.TAG, "refreshNews channel" + channel);
+        initNews(channel);
         newsAdapter.notifyDataSetChanged();
         newsRefresh.setRefreshing(false);
 //        final String newsUrl = "http://news.sina.cn/gn/2018-08-31/detail-ihinpmnq3713503.d.html?vt=4&pos=108";
@@ -293,7 +292,7 @@ public class NewsFragment extends Fragment {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String responseText = response.body().string();
-
+                newsList.clear();
                 try {
 
                     JSONObject jsonObject = new JSONObject(responseText);
@@ -321,9 +320,15 @@ public class NewsFragment extends Fragment {
                         @Override
                         public void run() {
                             Log.d(Utility.TAG, "initNews newsList length=" + newsList.size());
+                            for (int i = 0; i < newsList.size(); i++) {
+                                Log.d(Utility.TAG, "initNews newsList=" + newsList.get(i).getNewsTitle() + "--" + newsList.get(i).getNewsImage());
+
+                            }
 
                             newsAdapter = new NewsAdapter(getActivity(), R.layout.news_item, newsList);
                             newsListView.setAdapter(newsAdapter);
+                            Log.d(Utility.TAG, "newsAdapter length=" + newsAdapter.getCount());
+
 //                            newsListView.get
                             newsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
@@ -346,70 +351,6 @@ public class NewsFragment extends Fragment {
         });
 
 
-    }
-
-    public void initNetworkNews(String imageUrl, String title) {
-//        Glide.with(this).load(imageUrl).into(newsImage);
-
-//        Bitmap newsImage = getImageBitmap(imageUrl);
-        Log.d(Utility.TAG, "newsfragment initNetworkNews");
-
-        newsList.clear();
-        for (int i = 0; i < 20; i++) {
-            News news = new News(title, imageUrl);
-
-            Log.d(Utility.TAG, "newsTitle=" + news.getNewsTitle());
-
-            newsList.add(news);
-        }
-
-
-    }
-
-    public Bitmap getImageBitmap(String url) {
-        Log.d(Utility.TAG, "newsfragment getImageBitmap-1");
-
-        URL imgUrl = null;
-        Bitmap bitmap = null;
-
-//            imgUrl = new URL(url);
-//            HttpURLConnection conn = (HttpURLConnection) imgUrl
-//                    .openConnection();
-//            conn.setDoInput(true);
-//            conn.connect();
-//            conn.setConnectTimeout(5000);
-//            conn.setReadTimeout(5000);
-//            conn.setRequestMethod("GET");
-//            InputStream is = conn.getInputStream();
-//            bitmap = BitmapFactory.decodeStream(is);
-//            is.close();
-        Glide.with(this).load(url).into(newsImage);
-//
-//        HttpUtil.sendOkHttoRequest(url, new Callback() {
-//            @Override
-//            public void onFailure(Call call, IOException e) {
-//
-//                e.printStackTrace();
-//            }
-//
-//            @Override
-//            public void onResponse(Call call, final Response response) throws IOException {
-//
-//
-//                Log.d(Utility.TAG, "getImageBitmap" + response);
-//
-//                getActivity().runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        Glide.with(getActivity()).load(response).into(newsImage);
-//                    }
-//                });
-//            }
-//        });
-//
-        Log.d(Utility.TAG, "newsfragment getImageBitmap-2");
-
-        return bitmap;
     }
 
 

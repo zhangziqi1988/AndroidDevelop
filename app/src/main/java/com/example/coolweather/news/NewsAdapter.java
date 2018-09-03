@@ -25,11 +25,12 @@ public class NewsAdapter extends ArrayAdapter<News> {
 
     private int resourceId;
     private Context mContext;
-
+    private List<News> newsList;
     public NewsAdapter(@NonNull Context context, int resource, @NonNull List<News> objects) {
         super(context, resource, objects);
         resourceId = resource;
         mContext = context;
+        newsList = objects;
     }
 
     @NonNull
@@ -37,6 +38,7 @@ public class NewsAdapter extends ArrayAdapter<News> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
         News news = getItem(position);
+
         View view;
         if (convertView == null) {
             view = LayoutInflater.from(getContext()).inflate(resourceId, parent, false);
@@ -54,6 +56,13 @@ public class NewsAdapter extends ArrayAdapter<News> {
             Glide.with(mContext).load(news.getNewsImage()).fitCenter().into(newsImage);
         }
         newsTitle.setText(news.getNewsTitle());
+
+
         return view;
+    }
+
+    @Override
+    public int getCount() {
+        return newsList.size();
     }
 }
