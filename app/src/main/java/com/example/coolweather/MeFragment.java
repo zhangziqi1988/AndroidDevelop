@@ -56,7 +56,7 @@ public class MeFragment extends Fragment {
             public void onClick(View v) {
                 if (!loginStatus) {
                     Intent intent = new Intent(getActivity(), LoginActivity.class);
-                    startActivityForResult(intent);
+                    startActivity(intent);
 
                     if (userEmil != null && userSigure != null) {
                         userEmilText.setText(userEmil);
@@ -80,8 +80,5 @@ public class MeFragment extends Fragment {
 
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if()
-    }
+
 }
