@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -84,14 +86,14 @@ public class LoginActivity extends AppCompatActivity {
 //                    Toast.makeText(MainActivity.this,"登录成功",Toast.LENGTH_SHORT).show();
                     SharedPreferences.Editor editor_login = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this).edit();
                     editor_login.putBoolean("login_status", true);
-                    editor_login.commit();
+                    editor_login.apply();
                     if(checkBox.isChecked()){
                         editor.putString("name",userName);
 //                        editor.putString("password","123");
-                        editor.commit();
+                        editor.apply();
                     }else {
                         editor.remove("name");
-                        editor.commit();
+                        editor.apply();
                     }
                     Intent intent = new Intent();
                     intent.putExtra("login_return", userName);

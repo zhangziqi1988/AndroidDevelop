@@ -27,7 +27,7 @@ public class RegisActivity extends AppCompatActivity {
     private SQLiteDatabase db;
     private EditText userNameText;
     private EditText passWordText;
-    private String passWordDb= null;
+    private String passWordDb = null;
     private String userNameDb = null;
     private EditText userEmilText;
     private EditText userSigureText;
@@ -47,12 +47,8 @@ public class RegisActivity extends AppCompatActivity {
         userEmilText = (EditText) findViewById(R.id.emil);
         userSigureText = (EditText) findViewById(R.id.sigure);
 
-        userEmil = userEmilText.getText().toString();
-        userSigure = userSigureText.getText().toString();
-        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(RegisActivity.this).edit();
-        editor.putString("user_emil", userEmil);
-        editor.putString("user_sigure", userSigure);
-        editor.commit();
+
+
 
         button = (Button) findViewById(R.id.regisButton);
         button.setOnClickListener(new View.OnClickListener() {
@@ -78,18 +74,27 @@ public class RegisActivity extends AppCompatActivity {
 
                 }
 
-                if (passWordDb!=null) {
+                if (passWordDb != null) {
                     builder.setMessage("该用户已注册，请直接登录！");
                     builder.create().show();
                     finish();
 
-                }else {
+                } else {
                     User user = new User();
                     user.setUserName(userName);
                     user.setPassWord(passWord);
                     user.save();
                     builder.setMessage("注册成功");
                     builder.create().show();
+
+                    userEmil = userEmilText.getText().toString();
+                    userSigure = userSigureText.getText().toString();
+                    Log.d(Utility.TAG, "userEmil=" + userEmil + " " + "userSigure=" + userSigure);
+                    SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(RegisActivity.this).edit();
+                    editor.putString("user_emil", userEmil);
+                    editor.putString("user_sigure", userSigure);
+                    editor.apply();
+
                     finish();
                 }
 
