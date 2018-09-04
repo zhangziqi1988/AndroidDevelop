@@ -1,7 +1,9 @@
 package com.example.coolweather;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -77,7 +79,18 @@ public class MeFragment extends Fragment {
                     getActivity().startActivityForResult(intent, 1);
 
                 } else {
-                    Toast.makeText(getActivity(), "用户登录", Toast.LENGTH_SHORT).show();
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle("设置头像");
+                    final String[] choose = {"拍一张照片", "从手机中选择"};
+                    builder.setItems(choose, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Toast.makeText(getActivity(),"你选中的操作是:" + choose[which],Toast.LENGTH_SHORT).show();
+
+                        }
+                    });
+                    builder.show();
                 }
             }
 
