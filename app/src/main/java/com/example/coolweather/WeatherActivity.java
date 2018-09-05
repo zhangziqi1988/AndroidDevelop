@@ -42,6 +42,8 @@ import com.example.coolweather.service.AutoUpdateService;
 import com.example.coolweather.util.HttpUtil;
 import com.example.coolweather.util.Utility;
 
+import org.w3c.dom.Text;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -91,6 +93,7 @@ public class WeatherActivity extends AppCompatActivity implements NavigationView
     private MeFragment meFragment;
     private AlertDialog alertDialogQuit;
     private Uri imageUriWeather;
+    private TextView nowCity;
 
     public Uri getImageUriWeather() {
         return imageUriWeather;
@@ -127,33 +130,34 @@ public class WeatherActivity extends AppCompatActivity implements NavigationView
         swipeRefresh.setColorSchemeResources(R.color.colorPrimary);
         radioGroup = (RadioGroup) findViewById(R.id.radio_group);
         radioGroup.setOnCheckedChangeListener(this);
-
         View headLayout = navigationView.inflateHeaderView(R.layout.nav_header);
         navigationView.inflateMenu(R.menu.nav_menu);
-        loginView = (CircleImageView) headLayout.findViewById(R.id.login);
-        loginView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(WeatherActivity.this);
-                boolean login_status = prefs.getBoolean("login_status", false);
-                if (!login_status) {
-                    Intent intent = new Intent(WeatherActivity.this, LoginActivity.class);
-                    startActivityForResult(intent, 1);
+        nowCity = (TextView) headLayout.findViewById(R.id.now_city);
 
-//                finish();
-                    Log.d(Utility.TAG, "点击登录");
-                } else {
-
-                    SharedPreferences prefs_user_name = PreferenceManager.getDefaultSharedPreferences(WeatherActivity.this);
-                    String user_name = prefs_user_name.getString("user_name", null);
-                    Intent intent = new Intent(WeatherActivity.this, PersionInfoActivity.class);
-                    Log.d(Utility.TAG, "user_name=" + user_name);
-                    intent.putExtra("user_name", user_name);
-                    startActivity(intent);
-                }
-            }
-        });
-        userName = (TextView) headLayout.findViewById(R.id.user_name);
+//        loginView = (CircleImageView) headLayout.findViewById(R.id.login);
+//        loginView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(WeatherActivity.this);
+//                boolean login_status = prefs.getBoolean("login_status", false);
+//                if (!login_status) {
+//                    Intent intent = new Intent(WeatherActivity.this, LoginActivity.class);
+//                    startActivityForResult(intent, 1);
+//
+////                finish();
+//                    Log.d(Utility.TAG, "点击登录");
+//                } else {
+//
+//                    SharedPreferences prefs_user_name = PreferenceManager.getDefaultSharedPreferences(WeatherActivity.this);
+//                    String user_name = prefs_user_name.getString("user_name", null);
+//                    Intent intent = new Intent(WeatherActivity.this, PersionInfoActivity.class);
+//                    Log.d(Utility.TAG, "user_name=" + user_name);
+//                    intent.putExtra("user_name", user_name);
+//                    startActivity(intent);
+//                }
+//            }
+//        });
+//        userName = (TextView) headLayout.findViewById(R.id.user_name);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String weatherString = prefs.getString("weather", null);
@@ -239,12 +243,18 @@ public class WeatherActivity extends AppCompatActivity implements NavigationView
             @Override
             public void onClick(View v) {
 
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(WeatherActivity.this);
+                String weatherString = prefs.getString("weather", null);
+                Weather weather = Utility.handlerWeatherResponse(weatherString);
+                String nowCityName = weather.basic.cityName;
+                nowCity.setText(nowCityName);
+
+
                 drawerLayout.openDrawer(GravityCompat.START);
 
                 Log.d("CoolWeather", "加载滑动菜单");
             }
         });
-
 
 
         //设置navigationview的menu监听
